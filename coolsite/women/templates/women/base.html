@@ -1,27 +1,41 @@
+{% load static %}
+<!--
+  load static на jinja прописывается для подключения статических файлов
+-->
 <!DOCTYPE html>
-<html >
-    <head>
-        <meta charset="UTF-8">
-        <title>{{ title }}</title>
-        <!--
+<!--
+    Это базовый шаблон страницы здесь описывается все то 
+    что будет отображаться на каждой странице сайта 
+    и он расширяется с помощью блоков контента 
+    которые представляют собой другие html страницы данного приложения.
+    Блоки контента написаны на синтаксисе jinja
+-->
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{ title }}</title>
+    <!--
             Здесь в title и в ul в body передаются аргументы(будь то переменные либо строки)
-            значения которых прописаны в функциях в view в данном случае здесь берется title и menu
+            значения которых прописаны в функциях в view в данном случае здесь берется title 
         -->
-    </head>
-    
-<body>
+    <link
+      type="text/css"
+      href="{% static 'women/css/styles.css' %}"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
     {% block mainmenu %}
-        <!--
+    <!--
             Здесь с помощью цикла прописанного на синтаксисе jinja 
-            происходит отображение списка меню сайта
+            происходит отображение списка меню сайта сама переменная menu передаеться в функции 
         -->
-        <ul>
-            {% for m in menu %} 
-            <li>{{m}}</li>
-            {% endfor %}
-        </ul>
-    {% endblock mainmenu %}
-    {% block content %}
-    {% endblock content %}
-</body>
+    <ul>
+      {% for m in menu %}
+      <li>{{m}}</li>
+      {% endfor %}
+    </ul>
+    {% endblock mainmenu %} {% block content %} {% endblock content %}
+  </body>
 </html>

@@ -1,6 +1,6 @@
 from django.http import Http404, HttpResponse, HttpResponseNotFound
 from django.shortcuts import redirect, render
-from models import *
+from .models import *
 """Что делаем с menu
 Здесь у нас есть переменная со списком меню(menu) которую мы передаем в качестве словаря 
 в функциях отображения страницы и title в качестве значения той переменной которая указана 
@@ -8,10 +8,19 @@ from models import *
 на странице этот список
 """
 menu = ['Обсайт', 'Добавить статью', 'ОбрСвязь', 'Войти']
+"""
+    В функции index переменной posts присваевается ORM запрос 
+    из sql таблицы БД в которой у нас внесены данные и этой переменной присваивается вся таблица
+    которая затем передается через словарь в рендер html файла 
+    главной страницы и там парсится в список
+"""
+
 
 def index(request):
     posts = Women.objects.all()
-    return render(request, 'women/index.html', {'posts':posts, 'menu':menu, 'title': 'Главная'})
+    return render(request, 'women/index.html', {'posts': posts, 'menu': menu, 'title': 'Главная'})
+
+
 """Словари в функциях                                         
                                             в этих словарях передаются переменные 
                                             как значения а ключами выступают названия 
@@ -19,8 +28,10 @@ def index(request):
 
 """
 
+
 def about(request):
-    return render(request, 'women/about.html', {'menu':menu, 'title': 'Обсайт'})
+    return render(request, 'women/about.html', {'menu': menu, 'title': 'Обсайт'})
+
 
 def categories(reqest, catid):
     """Catid и Get
@@ -33,6 +44,7 @@ def categories(reqest, catid):
         print(reqest.GET)
     return HttpResponse(f"<h1>Статьи по категориям</h1><p>{catid}</p>")
 
+
 def archive(request, year):
     """Выражение If
         проверяет не больше ли значение переданное в функцию
@@ -41,6 +53,7 @@ def archive(request, year):
     if int(year) > 2022:
         return redirect('home', permanent=True)
     return HttpResponse(f"<h1>Архив по годам</h1><p>{year}</p>")
+
 
 def pageNotFound(request, exception):
     """
