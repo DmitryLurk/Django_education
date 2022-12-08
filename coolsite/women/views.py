@@ -7,7 +7,11 @@ from .models import *
 в файлах html там в свою очередь мы с помощью синтаксиса jinja проходимся по меню и отображаем 
 на странице этот список
 """
-menu = ['Обсайт', 'Добавить статью', 'ОбрСвязь', 'Войти']
+menu = [{"title": 'Обсайт', "url_name": "about"},
+        {"title": 'Добавить статью', "url_name": "add_page"},
+        {"title": 'ОбрСвязь', "url_name": "contact"},
+        {"title": 'Войти', "url_name": "login"}
+        ]
 """
     В функции index переменной posts присваевается ORM запрос 
     из sql таблицы БД в которой у нас внесены данные и этой переменной присваивается вся таблица
@@ -18,7 +22,15 @@ menu = ['Обсайт', 'Добавить статью', 'ОбрСвязь', 'В
 
 def index(request):
     posts = Women.objects.all()
-    return render(request, 'women/index.html', {'posts': posts, 'menu': menu, 'title': 'Главная'})
+    cats = Category.objects.all()
+    context = {
+        'posts': posts,
+        'cats': cats,
+        'menu': menu,
+        'title': 'Главная',
+        'cat_selected': 0
+    }
+    return render(request, 'women/index.html', context=context)
 
 
 """Словари в функциях                                         
@@ -31,6 +43,39 @@ def index(request):
 
 def about(request):
     return render(request, 'women/about.html', {'menu': menu, 'title': 'Обсайт'})
+
+
+def addpage(request):
+    return HttpResponse("ДобСтат")
+
+
+def contact(request):
+    return HttpResponse("ОбрСвязь")
+
+
+def login(request):
+    return HttpResponse("Ку")
+
+
+def show_post(request, post_id):
+    return HttpResponse(f"Статья {post_id}")
+
+
+def show_category(request, cat_id):
+    posts = Women.objects.filter(cat_id=cat_id)
+    cats = Category.objects.all()
+
+    if len(posts) == 0:
+        raise Http404
+
+    context = {
+        'posts': posts,
+        'cats': cats,
+        'menu': menu,
+        'title': 'Рубрики',
+        'cat_selected': cat_id
+    }
+    return render(request, 'women/index.html', context=context)
 
 
 def categories(reqest, catid):

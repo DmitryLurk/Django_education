@@ -12,12 +12,41 @@
     которая нам пришла из функции рендера из view где мы присвоили ей таблицу из БД
     и отображаем нужные нам данные на странице которая расширяет базовый шаблон
 -->
-<ul>
-  {% for i in posts %}
+<ul class="list-articles">
+  {% for p in posts %}
   <li>
-    <h2>{{i.title}}</h2>
-    <p>{{i.content}}</p>
-    <hr />
+    <div class="article-panel">
+      <p class="first">Категория: {{p.cat}}</p>
+      <p class="last">Дата: {{p.time_update|date:"d-m-Y H:i:s"}}</p>
+    </div>
+
+    {% if p.photo %}
+    <p><img class="img-article-left thumb" src="{{p.photo.url}}"></p>
+    {% endif %}
+    <!--
+      ^здесь проверяем есть ли у экземпляра класса модели women фото в бд 
+      и если есть отображаем его с помощью метода .url (src="p.photo.url}}")
+    -->
+
+  <li>
+    <h2>{{p.title}}</h2>
+    {% autoescape on %}
+    <!--
+    autoescape используется для экранирования тегов которые могут попасть в базу 
+    с плохими намереньями. если установлен on то все теги будут автоматически экранироваться
+    и отображаться  как текс, если его поставить в положение off то они будут пременятся в контенте
+    {% autoescape on %}
+    {% endautoescape %}
+  -->
+    {{p.content|linebreaks|truncatewords:40}}
+    <!--
+    Здесь на контенте поста используются два фильтра linebreaks используется для разделения строк
+    абзацем и оформления их как параграф. А truncatewords используется для ограничения количества
+    отображаемых строк которые хранятся в переменной p.content 
+  -->
+    {% endautoescape %}
+    <div class="clear"></div>
+    <p class="link-read-post"><a href="{{ p.get_absolute_url }}">Читать пост</a></p>
   </li>
   {% endfor %}
 </ul>
