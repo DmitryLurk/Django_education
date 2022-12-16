@@ -1,5 +1,5 @@
 from django.http import Http404, HttpResponse, HttpResponseNotFound
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from .models import *
 """Что делаем с menu
 Здесь у нас есть переменная со списком меню(menu) которую мы передаем в качестве словаря 
@@ -56,7 +56,14 @@ def login(request):
 
 
 def show_post(request, post_id):
-    return HttpResponse(f"Статья {post_id}")
+    post = get_object_or_404(Women, pk=post_id)
+    context = {
+        'post': post,
+        'menu': menu,
+        'title': post.title,
+        'cat_selected': post.cat,
+    }
+    return render(request, 'women/post.html', context=context)
 
 
 def show_category(request, cat_id):
