@@ -1,0 +1,27 @@
+{% extends 'women/base.html' %} 
+
+{% block content %}
+<h1>{{title}}</h1>
+
+<form action="{% url 'add_page' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">добавить</button>
+</form>
+
+{% endblock%}
+
+{% comment %}
+Атрибут method указывает способ передачи информации на сервер 
+(используется POST-запрос).
+
+
+тег csrf_token, который генерирует скрытое поле с уникальным токеном. 
+Это необходимо для защиты от CSRF-атак
+
+строчка {{ form.as_p }} вызывает метод as_p нашей формы для отображения 
+ее полей, используя теги абзацев <p>
+
+тег <button> создает кнопку типа submit для запуска процесса отправки 
+данных формы на сервер и, в конечном итоге, нашей функции представления addpage.
+{% endcomment %}

@@ -16,9 +16,9 @@
 <head>
   <title>{{title}}</title>
   <!--
-              Здесь в title и в ul в body передаются аргументы(будь то переменные либо строки)
-              значения которых прописаны в функциях в view в данном случае здесь берется title 
-          -->
+    Здесь в title и в ul в body передаются аргументы(будь то переменные либо строки)
+    значения которых прописаны в функциях в view в данном случае здесь берется title 
+  -->
   <link type="text/css" href="{% static 'women/css/styles.css' %}" rel="stylesheet" />
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <link rel="shortcut icon" href="{% static 'women/images/main.ico' %}" type="image/x-icon" />
@@ -32,24 +32,40 @@
         {% block mainmenu %}
         <div class="header">
           <ul id="mainmenu" class="mainmenu">
-            <!--
-                Здесь с помощью цикла прописанного на синтаксисе jinja 
-                происходит отображение списка меню сайта сама переменная menu передаеться в функции 
-              -->
             <li class="logo"><a href={% url "home" %}>
                 <div class="logo"></div>
               </a></li>
+              <!--
+                С помощью тега  main_menu  мы встироили в страницу inclusion тег
+                который сам формирует кусок страницы с гланым меню для соблюдения 
+                принципа DRY 
+              -->
+              
+              {% main_menu %}
+
+            {% comment %} 
+            
             {% for m in menu %}
-            {% if not forloop.last %}
-            <!-- Проверка на то последний ли элемент сейчас идет по циклу из menu-->
-            <li><a href={% url m.url_name %}>{{m.title}}</a></li>
-            {% else %}
+            <!--
+                Здесь с помощью цикла прописанного на синтаксисе jinja 
+                происходит отображение списка меню сайта сама переменная menu передаеться в функции 
+            -->
+              {% if not forloop.last %}
+            <!-- 
+              Проверка на то последний ли элемент сейчас идет по циклу из menu
+            -->
+                <li><a href={% url m.url_name %}>{{m.title}}</a></li>
+              {% else %}
             <!--m это словарь который является элементом списка в menu здесь мы 
                   парсим этот словарь для того чтобы отобразить текст списка меню и 
-                  одновременно присвоить ему ссылку на функцию через url-->
-            <li class="last"><a href={% url m.url_name %}>{{m.title}}</a></li>
-            {% endif %}
-            {% endfor %}
+                  одновременно присвоить ему ссылку на функцию через url
+            -->
+                <li class="last"><a href={% url m.url_name %}>{{m.title}}</a></li>
+              {% endif %}
+            {% endfor %} 
+            
+            {% endcomment %}
+
           </ul>
           <div class="clear"></div>
         </div>

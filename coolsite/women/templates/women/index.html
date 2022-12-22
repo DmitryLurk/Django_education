@@ -21,12 +21,14 @@
     </div>
 
     {% if p.photo %}
-    <p><img class="img-article-left thumb" src="{{p.photo.url}}"></p>
+    <p><img class="img-article-left thumb" src="{{p.photo.url}}" /></p>
     {% endif %}
     <!--
       ^здесь проверяем есть ли у экземпляра класса модели women фото в бд 
       и если есть отображаем его с помощью метода .url (src="p.photo.url}}")
+      именно url тк в БД хранится путь к папке с файлами а не сами файлы
     -->
+  </li>
 
   <li>
     <h2>{{p.title}}</h2>
@@ -46,7 +48,9 @@
   -->
     {% endautoescape %}
     <div class="clear"></div>
-    <p class="link-read-post"><a href="{{ p.get_absolute_url }}">Читать пост</a></p>
+    <p class="link-read-post">
+      <a href="{{ p.get_absolute_url }}">Читать пост</a>
+    </p>
   </li>
   {% endfor %}
 </ul>

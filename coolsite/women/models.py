@@ -7,6 +7,8 @@ from django.urls import reverse
 
 class Women(models.Model):
     title = models.CharField(max_length=255, verbose_name="Заголовок")
+    slug = models.SlugField(max_length=255, unique=True,
+                            db_index=True, verbose_name="URL")
     content = models.TextField(blank=True, verbose_name="Текст статьи")
     photo = models.ImageField(
         upload_to="photos/%Y/%m/%d/", verbose_name="Фото")
@@ -36,7 +38,7 @@ class Women(models.Model):
             метод возвращает url удобоваримый для path чтобы сформировать 
             ссылку <a href="{{ p.get_abs_url }}"> в index.html
         """
-        return reverse('post', kwargs={'post_id': self.pk})
+        return reverse('post', kwargs={'post_slug': self.slug})
 
     class Meta:
         verbose_name = 'Известные женщины'
@@ -45,7 +47,10 @@ class Women(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=100, db_index=True, verbose_name='Категория')
+    name = models.CharField(
+        max_length=100, db_index=True, verbose_name='Категория')
+    slug = models.SlugField(max_length=255, unique=True,
+                            db_index=True, verbose_name="URL")
 
     def __str__(self) -> str:
         return self.name
@@ -55,7 +60,7 @@ class Category(models.Model):
             метод возвращает url удобоваримый для path чтобы сформировать 
             ссылку <a href="{{ p.get_abs_url }}"> в index.html
         """
-        return reverse('category', kwargs={'cat_id': self.pk})
+        return reverse('category', kwargs={'cat_slug': self.slug})
 
     class Meta:
         verbose_name = 'Категория'
