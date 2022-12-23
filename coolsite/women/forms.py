@@ -16,6 +16,7 @@ class AddPostForm(forms.ModelForm):
         класса forms.ModelForm вместе с конструктором в котором при необходимости можно
         переопределить необходимые поля
     """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['cat'].empty_label = 'Категория не выбрана'
@@ -40,4 +41,3 @@ class AddPostForm(forms.ModelForm):
         if len(title) > 100:
             raise ValidationError("Превышена длинна в 100 символов")
         return title
-    
