@@ -116,6 +116,37 @@
               <div class="content-text">
                 {% block content %}
                 {% endblock %}
+                {% if page_obj.has_other_pages %}
+                  <nav class="list-pages">
+                    <ul>
+                      {% comment %} эта проверка добавляет < если есть предыдущая страница {% endcomment %}
+                      {% if page_obj.has_previous %}
+                      <li class="page-num">
+                      	<a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+                      </li>
+                      {% endif %}
+                      {% comment %} 
+                      Этот цикл отображает ссылки на страницы причем ограничивает их 
+                      количество от выбранной на +2 и -2 если они есть 
+                      {% endcomment %}
+                      {% for p in paginator.page_range %}
+              	      {% if page_obj.number == p %}
+                      <li class="page-num page-num-selected">{{ p }}</li>
+              	      {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2  %}
+                      <li class="page-num">
+                        <a href="?page={{ p }}">{{ p }}</a>
+                      </li>
+              	      {% endif %}
+                      {% endfor %}
+                      {% comment %} эта проверка добавляет > если есть следующая страница {% endcomment %}
+                      {% if page_obj.has_next %}
+                      <li class="page-num">
+                        <a href="?page={{ page_obj.next_page_number }}">&gt;</a>
+                      </li>
+                      {% endif %}
+                    </ul>
+                  </nav>
+                  {% endif %}
               </div>
               <!-- Конец блока контента -->
 

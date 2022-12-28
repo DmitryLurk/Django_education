@@ -2,6 +2,7 @@ from django.http import Http404, HttpResponse, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 
 from .forms import *
 from .models import *
@@ -73,7 +74,13 @@ class WomenHome(DataMixin, ListView):
 
 
 def about(request):
-    return render(request, 'women/about.html', {'title': 'Обсайт'})
+    contact_list = Women.objects.all()
+    paginator = Paginator(contact_list, 3)
+    
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'women/about.html', {'page_obj' : page_obj , 'title': 'Обсайт'})
 
 # Функция переписана в класс
 # def addpage(request):
